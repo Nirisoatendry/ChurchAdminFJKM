@@ -9,7 +9,7 @@ export const FormInputText = memo(({ name, control, label,type }) => {
         name={name}
         control={control}
         render={({ field: { onChange, value } }) => (
-          <TextField  type={type} onChange={onChange} value={value} variant="outlined" fullWidth label={label} />
+          <TextField  type={type} onChange={onChange} value={value} variant="outlined" margin="dense"  fullWidth label={label} />
         )}
       />
       )
