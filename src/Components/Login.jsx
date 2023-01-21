@@ -14,29 +14,43 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { url } from '../api/config';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
+
 export default function SignIn() {
   const [isLoading,setIsLoading] = React.useState(false);
-  const [data, setData] = React.useState(null);
+  const [response, setResponse] = React.useState(null);
+  const [data,setData] = React.useState(null);
   const [error,setError] = React.useState(null);
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const data  = {
       username: form.get('username'),
       password: form.get('password'),
-    }
-    ( async()=>{
-      setIsLoading(true);
-        try {
-          const response = await axios.post(url+'/auth/login',data);
-          setIsLoading(false);
-        } catch (error) {
-          console.log(error);
-        }
-    } )();
+    };
+   if(data.username=='' || data.password==''){
+    setData(data);
+   }else{
+      axios.post(url + '/auth/login',
+      data).then( (res)=>{
+        //response = res.data
+        console.log(res);
+      setResponse(res.data);
+      localStorage.setItem('user',res.data.data)
+      if(res.data.succes === true){
+        navigate('/dashboard')
+      }else{
+
+      }     
+    }).catch((error)=>{
+      console.log(error);
+    })
+   }
+
   };
 
   return (
@@ -68,6 +82,7 @@ export default function SignIn() {
               autoComplete="username"
               autoFocus
             />
+            {data?.username==='' ?<small>Veuillez remplir ce champ</small> : '' }
             <TextField
               margin="normal"
               required
@@ -78,10 +93,13 @@ export default function SignIn() {
               id="password"
               autoComplete=""
             />
+            {data?.password ===''? <small>Veuillez remplir ce champ</small> : ''}
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
+             {response?.succes===false ? <small>{response.message}</small> : null}
+
             <Button
               type="submit"
               fullWidth
