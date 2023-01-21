@@ -10,10 +10,10 @@ export default function Dashboard() {
   return (
     <ThemeProvider theme =  {themes}>
     <Grid container sx= {{wrap : 'wrap'}}>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
             <Sidebar></Sidebar>
         </Grid>
-        <Grid container item xs={9}>
+        <Grid container item xs={10}>
             <Grid item xs={12} sx={{height: '10vh'}}>
                 <Header></Header>
             </Grid>

@@ -2,7 +2,6 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
@@ -14,29 +13,34 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { url } from '../api/config';
+import { useForm } from 'react-hook-form';
+import { FormInputText } from '../feature/InputText';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
-
+const defaultValue = {
+  username:"",
+  password:""
+}
 export default function SignIn() {
   const [isLoading,setIsLoading] = React.useState(false);
   const [data, setData] = React.useState(null);
   const [error,setError] = React.useState(null);
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const data  = {
-      username: form.get('username'),
-      password: form.get('password'),
-    }
+  const {handleSubmit,reset,control,setValue} =  useForm({defaultValues:defaultValue});
+  const navigate = useNavigate();
+  const onSubmit = (data) => {
     ( async()=>{
       setIsLoading(true);
         try {
           const response = await axios.post(url+'/auth/login',data);
-          setIsLoading(false);
+          // console.log(response);
+          // setIsLoading(false);
+          navigate('/dashboard')
         } catch (error) {
           console.log(error);
         }
     } )();
+    reset();
   };
 
   return (
@@ -57,26 +61,20 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+            <FormInputText
               id="username"
               label="Username"
+              type="text"
               name="username"
-              autoComplete="username"
-              autoFocus
+              control={control}
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
+            <FormInputText
+              id="password"
               label="Password"
               type="password"
-              id="password"
-              autoComplete=""
+              name="password"
+              control={control}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
