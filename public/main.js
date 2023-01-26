@@ -1,3 +1,4 @@
+//code source pour l'introduction de l'electron
 const {app,BrowserWindow} = require('electron');
 require("@electron/remote/main").initialize();
 function createWindow () {
@@ -10,7 +11,6 @@ function createWindow () {
     })
     win.loadURL('http://localhost:3000')
 }
-
 
 app.on('ready',createWindow);
 

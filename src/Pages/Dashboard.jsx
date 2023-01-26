@@ -4,9 +4,7 @@ import Header from '../Components/Header'
 import Sidebar from '../Components/Sidebar'
 import { UserContext } from '../contexte/UserContexte'
 import { themes } from '../Themes/themes'
-import { useContext } from 'react'
 export default function Dashboard() {
-  const context = useContext(UserContext);
   const user = localStorage.getItem('user');
   return (
     <UserContext.Provider value={user}>
