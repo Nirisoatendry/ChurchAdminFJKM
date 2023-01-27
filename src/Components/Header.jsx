@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "./Header.css";
 import {AppBar,Toolbar,Avatar,Box,Divider,IconButton,List,ListItem,ListItemIcon,ListItemText,makeStyles,CssBaseline,Drawer,Typography,} from "@material-ui/core";
 import {Apps, Menu,ContactMail,AssignmentInd,Home,} from "@material-ui/icons";
+import { UserContext } from "../contexte/UserContexte";
  
 const useStyles = makeStyles((theme) => ({
   menuSliderContainer: {
@@ -49,7 +50,8 @@ const listItems = [
 export default function App() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-
+  const context = useContext(UserContext)
+  console.log(context)
   const toggleSlider = () => {
     setOpen(!open);
   };
@@ -85,7 +87,7 @@ export default function App() {
             <Box onClick={toggleSlider} className={classes.user}>
               <AccountCircleIcon>
               </AccountCircleIcon>
-              <Typography>  User Connected </Typography>
+              <Typography> {context}</Typography>
             </Box>
          
             <Drawer open={open} anchor="right" onClose={toggleSlider}>

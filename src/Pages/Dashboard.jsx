@@ -1,13 +1,13 @@
 import { Grid, ThemeProvider } from '@mui/material'
-import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Header from '../Components/Header'
 import Sidebar from '../Components/Sidebar'
+import { UserContext } from '../contexte/UserContexte'
 import { themes } from '../Themes/themes'
-
-
 export default function Dashboard() {
+  const user = localStorage.getItem('user');
   return (
+    <UserContext.Provider value={user}>
     <ThemeProvider theme =  {themes}>
     <Grid container sx= {{wrap : 'wrap'}}>
         <Grid item xs={2}>
@@ -23,5 +23,6 @@ export default function Dashboard() {
         </Grid>
     </Grid>
     </ThemeProvider>
+    </UserContext.Provider>
   )
 }

@@ -24,7 +24,12 @@ const defaultValue = {
 }
 export default function SignIn() {
   const [isLoading,setIsLoading] = React.useState(false);
+<<<<<<< HEAD
   // const [data, setData] = React.useState(null);
+=======
+  const [response, setResponse] = React.useState(null);
+  const [data,setData] = React.useState(null);
+>>>>>>> 54d7e2385d891d3a96fc79f098f86ec4c8ed862b
   const [error,setError] = React.useState(null);
   const {handleSubmit,reset,control,setValue} =  useForm({defaultValues:defaultValue});
   const navigate = useNavigate();
@@ -81,10 +86,13 @@ export default function SignIn() {
               name="password"
               control={control}
             />
+            {data?.password ===''? <small>Veuillez remplir ce champ</small> : ''}
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
+             {response?.succes===false ? <small>{response.message}</small> : null}
+
             <Button
               type="submit"
               fullWidth
