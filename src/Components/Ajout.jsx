@@ -8,6 +8,8 @@ import { FormInputText } from '../feature/InputText';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ajout } from '../api/fetch';
+import { url } from '../api/config';
 // import useFetch from '../hook/useFetch';
 const defaultValue = {
   nom: '',
@@ -43,37 +45,55 @@ export default function Ajout({id,set,titre,setTitre}) {
   const handleSuivant = (data)=>{
     // envoyer data (zanaka
     // vider les champs
-    console.log("suivant",data);
+    // console.log("suivant",data);
+    const id_neny = localStorage.getItem("id_neny")
+    const id_dada = localStorage.getItem("id_dada")
+    console.log(id_neny,id_dada);
+    (async()=>{
+      try {
+        const res= await ajout(url+"/ajout/ankehitriny/zanaka",{...data,id_neny:id_neny,id_dada:id_dada});
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
     // reset();
   };
   const OnSubmit= (data)=>{
-    setForms(data)
-    // console.log(data)
-    console.log("kjjhgjhgjhg")
-    if(titre=='Dada'){
-      //Envoyer donner RAD eto
-      if(id==0){// nodimandry
-        // setStateId(2);
-        // set(1)
-
-      }else{ //ankehitriny
-        console.log("uuu")
-      }
-      setTitre('Neny');
-      console.log("RAD",data);
-    }else if(titre=='Neny') {
-      //Envoyer donner Zanaka eto
-      console.log("zanaka",data);
-      setTitre("Zanaka")
-    }else{
-        navigate('/dashboard/listes');
-    } 
+    // setForms(data)
+    (async ()=>{
+        try {
+          let resp = 0
+          if(titre=='Dada'){
+            //Envoyer donner RAD eto
+            if(id==0){// nodimandry
+              // setStateId(2);
+              // set(1)
+               resp = await ajout(url+"/ajout/nodimandry/dada",data);
+            }else{ //ankehitriny
+               resp = await ajout(url+"/ajout/ankehitriny/dada",data);
+            }
+            // console.log(resp.data.data)
+            localStorage.setItem("id_dada",resp.data.insertId);
+            setTitre('Neny');
+          }else if(titre=='Neny') {
+            //Envoyer donner Zanaka eto
+            console.log(data)
+            resp = await ajout(url+"/ajout/ankehitriny/neny",data);
+            // localStorage.setItem("id_neny",resp.data.insertId);
+            console.log(resp)
+            // setTitre("Zanaka")
+          }else{
+              // const resp = await ajout(url+"/ajout/nodimandry/zanaka",data);
+              navigate('/dashboard/listes');
+          } 
+        } catch (error) {
+          console.log(error)
+        }
+    })()
     setSuivant(true);
     reset();
   }
-  // React.useEffect(()=>{
-  //   reset();
-  // },[id]);
   return (
     <Box component="form" sx={{margin:'20px',maxHeight:'65vh',overflowY:'scroll'}}>
       <Typography  variant="h4">Remplir le formulaire ( {titre} ) </Typography>

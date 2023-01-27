@@ -24,7 +24,7 @@ const defaultValue = {
 }
 export default function SignIn() {
   const [isLoading,setIsLoading] = React.useState(false);
-  const [data, setData] = React.useState(null);
+  // const [data, setData] = React.useState(null);
   const [error,setError] = React.useState(null);
   const {handleSubmit,reset,control,setValue} =  useForm({defaultValues:defaultValue});
   const navigate = useNavigate();
@@ -35,7 +35,12 @@ export default function SignIn() {
           const response = await axios.post(url+'/auth/login',data);
           // console.log(response);
           // setIsLoading(false);
-          navigate('/dashboard')
+          if(response.data.success){
+            navigate('/dashboard');
+          }else{
+            alert(response.data.message);
+          }
+          
         } catch (error) {
           console.log(error);
         }
